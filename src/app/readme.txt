@@ -1,4 +1,6 @@
 how to use:
+requirements jszip and file-saver
+
 1. require nimbyx-uploader.
 2. inject "nimbyx-uploader" in your app module.
 3. 
