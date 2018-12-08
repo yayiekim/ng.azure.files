@@ -85,7 +85,7 @@
                 bytesUploaded: 0,
                 submitUri: null,
                 file: file,
-                fileUrl: response.sasUrl,
+                fileUrl: config.sasUrl,
                 progress: config.progress,
                 complete: config.complete,
                 error: config.error,
