@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-
+    var FileSaver = require('file-saver');
     Factory.$inject = ['$q', '$http'];
 
     function Factory($q, $http) {
