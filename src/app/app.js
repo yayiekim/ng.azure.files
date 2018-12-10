@@ -33,6 +33,7 @@ angular.module(MODULE_NAME, [])
 })
 .directive('dropFile', function (){
     return {
+        template: '<input style="display: none;" hidden="hidden" id="file-input" type="file"/><label for="file-input">browse</label>',
         scope: {
             fileListCallback: "&"
         },
