@@ -9,7 +9,7 @@ angular.module(MODULE_NAME, [])
 .service('downloadService', downloadService)
 .directive('browseFile', function (){
     return {
-        template: '<input style="display: none;" hidden="hidden" id="file-input" type="file"/><label for="file-input">browse</label>',
+        template: '<input style="display: none;" id="file-input" type="file"/><label for="file-input">browse</label>',
         scope: {
             fileListCallback: "&",
         },
