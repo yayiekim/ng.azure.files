@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-
+    var FileSaver = require('file-saver');
     Factory.$inject = ['$q', '$http'];
 
     function Factory($q, $http) {
@@ -9,37 +9,33 @@
 
         function downloadAsFile(config) {
 
-            $http.get(config.sasUrl).then(function (result) {
-
-                $http.get(result.data.data, {
-                    cache: false,
-                    responseType: "arraybuffer",
-                    eventHandlers: {
-                        progress: function (event) {
-                            config.progress((event.loaded / event.total) * 100);
-                        }
-                    },
-                    headers: {
-                        "Content-Type": "application/octet-stream; charset=utf-8"
-                    },
-                    requestComingFromUploaderService: true
-                }).then(function (response) {
-                    var octetStreamMime = "application/octet-stream";
+            $http.get(config.sasUrl, {
+                cache: false,
+                responseType: "arraybuffer",
+                eventHandlers: {
+                    progress: function (event) {
+                        config.progress((event.loaded / event.total) * 100);
+                    }
+                },
+                headers: {
+                    "Content-Type": "application/octet-stream; charset=utf-8"
+                },
+                requestComingFromUploaderService: true
+            }).then(function (response) {
+                var octetStreamMime = "application/octet-stream";
 
 
-                    var contentType = response.headers["content-type"] || octetStreamMime;
+                var contentType = response.headers["content-type"] || octetStreamMime;
 
-                    var blob = new Blob([response.data], { type: contentType });
-                    FileSaver.saveAs(blob, config.filename);
-                    defer.resolve();
+                var blob = new Blob([response.data], { type: contentType });
+                FileSaver.saveAs(blob, config.filename);
+                defer.resolve();
 
-                }, function (response) {
-                    defer.reject(response);
+            }, function (response) {
+                defer.reject(response);
 
-                });
-            }, function (error) {
-                defer.reject(error);
             });
+
 
             return defer.promise;
         }
