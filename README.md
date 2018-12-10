@@ -1,5 +1,6 @@
 how to use:
 requirements jszip and file-saver
+npm install ng.azure.files
 
 1. require ng.azure.files.
 2. inject "ng.azure.files" in your app module.
