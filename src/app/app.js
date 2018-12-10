@@ -9,12 +9,7 @@ angular.module(MODULE_NAME, [])
 .service('downloadService', downloadService)
 .directive('browseFile', function (){
     return {
-        controller: ['$scope', function($scope){
-
-              $scope.inputd = $scope.$id;
-
-        }],
-        template: '<input style="display: none;" id="{{inputd}}" multiple type="file"/><label for="{{inputd}}">browse</label>',
+        template: '<input style="display: none;" id="{{input + $id}}" multiple type="file"/><label for="{{input + $id}}">browse</label>',
         scope: {
             fileListCallback: "&",
         },
