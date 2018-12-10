@@ -11,22 +11,10 @@ angular.module(MODULE_NAME, [])
     return {
         controller: ['$scope', function($scope){
 
-         
-            function guid() {
-                function s4() {
-                  return Math.floor((1 + Math.random()) * 0x10000)
-                    .toString(16)
-                    .substring(1);
-                }
-                return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-              };
-
-              var uuid = guid();
-
-              $scope.inputId = uuid;
+              $scope.inputd = $scope.$id;
 
         }],
-        template: '<input style="display: none;" id="{{inputId}}" multiple type="file"/><label for="{{inputId}}">browse</label>',
+        template: '<input style="display: none;" id="{{inputd}}" multiple type="file"/><label for="{{inputd}}">browse</label>',
         scope: {
             fileListCallback: "&",
         },
