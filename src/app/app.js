@@ -9,7 +9,19 @@ angular.module(MODULE_NAME, [])
 .service('downloadService', downloadService)
 .directive('browseFile', function (){
     return {
-        template: '<input style="display: none;" id="file-input" multiple type="file"/><label for="file-input">browse</label>',
+        controller: ['$scope', function($scope){
+
+            $scope.inputId = function guid() {
+                function s4() {
+                  return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+                }
+                return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+              };
+
+        }],
+        template: '<input style="display: none;" id="{{inputId}}" multiple type="file"/><label for="{{inputId}}">browse</label>',
         scope: {
             fileListCallback: "&",
         },
