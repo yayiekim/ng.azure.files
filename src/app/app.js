@@ -11,7 +11,8 @@ angular.module(MODULE_NAME, [])
     return {
         controller: ['$scope', function($scope){
 
-            $scope.inputId = function guid() {
+         
+            function guid() {
                 function s4() {
                   return Math.floor((1 + Math.random()) * 0x10000)
                     .toString(16)
@@ -19,6 +20,10 @@ angular.module(MODULE_NAME, [])
                 }
                 return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
               };
+
+              var uuid = guid();
+
+              $scope.inputId = uuid;
 
         }],
         template: '<input style="display: none;" id="{{inputId}}" multiple type="file"/><label for="{{inputId}}">browse</label>',
