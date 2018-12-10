@@ -15,6 +15,7 @@ npm install ng.azure.files
 ```
 4. sample uploading function:
 
+```javascript
       vm.nInputFile = function(file){
             angular.forEach(file,function(key, val) {
 
@@ -22,13 +23,13 @@ npm install ng.azure.files
                     sasUrl: '',
                     file: key,
                     progress: function(amount) {
-                       
+                       console.log(amount);
                     },
                     complete: function() {
-
+                        console.log('upload completed');
                     },
                     error: function(data, status, err, config) {
-
+                        console.log('upload error');
                     }
                 };
 
@@ -37,3 +38,4 @@ npm install ng.azure.files
             });
 
         };
+```
