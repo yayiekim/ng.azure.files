@@ -9,10 +9,12 @@ angular.module(MODULE_NAME, [])
 .service('downloadService', downloadService)
 .directive('browseFile', function (){
     return {
+        template: '<input style="display: none;" id="{{input + $id}}" multiple type="file"/><label for="{{input + $id}}">browse</label>',
         scope: {
             fileListCallback: "&",
         },
         link: function (scope, element, attributes) {
+
             element.bind("change", function (e) {
                 
                 var fileList = [];
@@ -25,7 +27,7 @@ angular.module(MODULE_NAME, [])
                     }
                 }
                 scope.fileListCallback({ files: fileList });
-
+                element.val(null);
             });
         }
     };
