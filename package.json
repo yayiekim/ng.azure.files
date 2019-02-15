@@ -1,6 +1,6 @@
 {
   "name": "ng.azure.files",
-  "version": "1.0.12",
+  "version": "1.0.14",
   "description": "Sas base uploader for js",
   "main": "app.js",
   "scripts": {

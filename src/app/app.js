@@ -27,7 +27,7 @@ angular.module(MODULE_NAME, [])
                     }
                 }
                 scope.fileListCallback({ files: fileList });
-                element.val(null);
+                this.value = null
             });
         }
     };
