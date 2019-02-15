@@ -14,6 +14,7 @@ angular.module(MODULE_NAME, [])
             fileListCallback: "&",
         },
         link: function (scope, element, attributes) {
+
             element.bind("change", function (e) {
                 
                 var fileList = [];
@@ -26,7 +27,7 @@ angular.module(MODULE_NAME, [])
                     }
                 }
                 scope.fileListCallback({ files: fileList });
-
+                element.val(null);
             });
         }
     };
