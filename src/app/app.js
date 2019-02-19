@@ -26,8 +26,10 @@ angular.module(MODULE_NAME, [])
                         fileList.push(files[i]);
                     }
                 }
+                console.log('not cleared',files);
                 scope.fileListCallback({ files: fileList });
                 this.value = null
+                console.log('cleared',files);
             });
         }
     };
