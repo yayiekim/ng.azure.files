@@ -1,18 +1,20 @@
-<script src="../node_modules/angular/angular.min.js" ></script>
-<script src="../dist/ng.azure.files.js" ></script>
-
+<script src="<%= htmlWebpackPlugin.files.chunks['ng.azure.files'].entry %>"></script>
 <script>
     var app = angular.module('demo', ['ng.azure.files'])
-    .controller('cont', function($scope) {
-        $scope.greeting = 'Welcome!';
-    });
-    
-  </script>
+        .controller('cont', function ($scope) {
+            $scope.greeting = 'Welcome!';
 
-<div ng-app="demo" >
-    <div ng-controller="cont" >
-        <input hidden="hidden" id="file-input" type="file" browse-file file-list-callback="vm.nInputFile(files)" />
-    <label for="file-input">browse</label>
+            $scope.nInputFile = function () {
+
+                console.log("callback");
+            }
+        });
+
+</script>
+<div ng-app="demo">
+    <div ng-controller="cont">
+        <input hidden="hidden" dropFile id="file-input" type="file" file-list-callback="nInputFile(files)" />
+        <label for="file-input">browse</label>
+        <div drop-file file-list-callback="nInputFile(files)" style="background-color: coral; height: 250px; width: 250px;"></div>
     </div>
-    
 </div>
