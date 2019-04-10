@@ -40,7 +40,7 @@
             };
 
         })
-        .directive('dropFile', ['zipService', function (zipService) {
+        .directive('dropFile', ['$q', 'zipService', function ($q, zipService) {
             return {
                 scope: {
                     fileListCallback: "&"
@@ -56,6 +56,7 @@
                         e.preventDefault();
 
                         var fileList = [];
+                        var zipPromises = [];
                         var files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
 
                         if (files.length > 0) {
@@ -67,14 +68,21 @@
                                     if (entry.isFile) {
                                         fileList.push(files[i]);
                                     } else if (entry.isDirectory) {
-                                        zipService.zipFolder(entry).then(function (result) {
-                                            fileList.push(result);
-                                        });
+                                        zipPromises.push(zipService.zipFolder(entry));
                                     }                                
                                 }                 
                             }
                         }
-                        scope.fileListCallback({ files: fileList });
+
+                        $q.all(zipPromises).then(function (res) {
+                            angular.forEach(res, function (value, key) {
+                                fileList.push(value);
+                            });
+                            //console.log('result', res);
+                            scope.fileListCallback({ files: fileList });
+                            zipPromises = [];
+                        });
+                  
                     });
                 }
             };
