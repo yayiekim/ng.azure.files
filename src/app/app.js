@@ -7,7 +7,7 @@
     const uploadService = require('./upload.factory.js');
     const downloadService = require('./download.factory.js');
     const zipService = require('./zip.factory.js');
-
+    const supportedImageFormats = ["jpeg", "jpg", "gif", "png", "tiff", "bmp"];
     angular.module(MODULE_NAME, [])
         .service('uploadService', uploadService)
         .service('downloadService', downloadService)
@@ -17,6 +17,7 @@
                 template: '<input style="display: none;" id="{{input + $id}}" multiple type="file"/><label for="{{input + $id}}">browse</label>',
                 scope: {
                     fileListCallback: "&",
+                    imageOnly: "&"
                 },
                 link: function (scope, element, attributes) {
 
@@ -28,7 +29,23 @@
                         if (files.length > 0) {
 
                             for (var i = 0; i < files.length; i++) {
-                                fileList.push(files[i]);
+                                if (scope.imageOnly()) {
+                                    var extension = files[i].name.split(".").pop();
+
+                                    var isImage = false;
+                                    angular.forEach(supportedImageFormats, function (value, key) {
+                                        if (value === extension) {
+                                            isImage = true;
+                                        }
+                                    });
+
+                                    if (isImage) {
+                                        fileList.push(files[i]);
+                                    }
+                                }
+                                else {
+                                    fileList.push(files[i]);
+                                }
                             }
                         }
                         console.log('not cleared', files);
@@ -43,7 +60,8 @@
         .directive('dropFile', ['$q', 'zipService', function ($q, zipService) {
             return {
                 scope: {
-                    fileListCallback: "&"
+                    fileListCallback: "&",
+                    imageOnly: "&"
                 },
                 link: function (scope, element, attributes) {
 
@@ -65,11 +83,27 @@
 
                                 if (typeof (e.dataTransfer.items) !== 'undefined') {
                                     var entry = e.dataTransfer.items[i].webkitGetAsEntry();
-                                    if (entry.isFile) {
-                                        fileList.push(files[i]);
-                                    } else if (entry.isDirectory) {
-                                        zipPromises.push(zipService.zipFolder(entry));
-                                    }                                
+                                    if (scope.imageOnly()) {
+                                        var extension = files[i].name.split(".").pop();
+
+                                        var isImage = false;
+                                        angular.forEach(supportedImageFormats, function (value, key) {
+                                            if (value === extension) {
+                                                isImage = true;
+                                            }
+                                        });
+
+                                        if (isImage) {
+                                            fileList.push(files[i]);
+                                        }
+                                    }
+                                    else {
+                                        if (entry.isFile) {
+                                            fileList.push(files[i]);
+                                        } else if (entry.isDirectory) {
+                                            zipPromises.push(zipService.zipFolder(entry));
+                                        }   
+                                    }                             
                                 }                 
                             }
                         }
@@ -78,7 +112,6 @@
                             angular.forEach(res, function (value, key) {
                                 fileList.push(value);
                             });
-                            //console.log('result', res);
                             scope.fileListCallback({ files: fileList });
                             zipPromises = [];
                         });
