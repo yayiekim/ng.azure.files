@@ -34,7 +34,7 @@
 
                                     var isImage = false;
                                     angular.forEach(supportedImageFormats, function (value, key) {
-                                        if (value === extension) {
+                                        if (value.toUpperCase() === extension.toUpperCase()) {
                                             isImage = true;
                                         }
                                     });
@@ -88,7 +88,7 @@
 
                                         var isImage = false;
                                         angular.forEach(supportedImageFormats, function (value, key) {
-                                            if (value === extension) {
+                                            if (value.toUpperCase() === extension.toUpperCase()) {
                                                 isImage = true;
                                             }
                                         });
