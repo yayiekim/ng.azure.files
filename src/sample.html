@@ -1,12 +1,45 @@
 <script src="<%= htmlWebpackPlugin.files.chunks['ng.azure.files'].entry %>"></script>
 <script>
     var app = angular.module('demo', ['ng.azure.files'])
-        .controller('cont', function ($scope) {
+        .controller('cont', function ($scope, downloadService) {
             $scope.greeting = 'Welcome!';
+            $scope.progress = 0;
+
+            $scope.mainConfig = function (event) {
+                $scope.progress = parseInt(event);
+            };
 
             $scope.nInputFile = function () {
 
                 console.log("callback");
+            }
+
+            $scope.testDownload = function () {
+                var configs = [];
+
+                var sampleConfig = {
+                    "sasUrl": "https://devkoisstorage.blob.core.windows.net/kois/patient/305a13a8-fc61-4b54-ee71-08d671f627c5/3bb11eef-adae-4f2f-887f-84fdefc527fc?sv=2018-03-28&sr=b&sig=sexx0O82rVgjv1fMn8%2ByQCI2ioipmXYofubLXRgkZqk%3D&se=2019-05-14T03%3A39%3A35Z&sp=rwdl",
+                    "filename": "Kois Notes.txt"
+                }
+
+                var sampleConfig2 = {
+                    "sasUrl": "https://devkoisstorage.blob.core.windows.net/kois/patient/305a13a8-fc61-4b54-ee71-08d671f627c5/3bb11eef-adae-4f2f-887f-84fdefc527fc?sv=2018-03-28&sr=b&sig=sexx0O82rVgjv1fMn8%2ByQCI2ioipmXYofubLXRgkZqk%3D&se=2019-05-14T03%3A39%3A35Z&sp=rwdl",
+                    "filename": "SampleJPGImage_15mbmb.jpg"
+                }
+
+                configs.push(sampleConfig);
+                configs.push(sampleConfig2);
+
+                downloadService.downlaodAsZip(configs, $scope.mainConfig, "Kois Notes");
+            }
+
+            $scope.testSingleDownload = function() {
+                var sampleConfig = {
+                    "sasUrl": "https://devkoisstorage.blob.core.windows.net/kois/patient/305a13a8-fc61-4b54-ee71-08d671f627c5/1/Kois%20Notes.txt?sv=2018-03-28&sr=b&sig=wasCEoqIaDHggAYulwESinVpyoUZOIQOwJO%2By9z6ntM%3D&se=2019-05-10T04%3A25%3A35Z&sp=rwdl",
+                    "filename": "Kois Notes.txt"
+                };
+
+                downloadService.downloadAsFile(sampleConfig);
             }
         });
 
@@ -16,5 +49,10 @@
         <input hidden="hidden" browse-file id="file-input" type="file" file-list-callback="nInputFile(files)" />
         <label for="file-input">browse</label>
         <div drop-file file-list-callback="nInputFile(files)" style="background-color: coral; height: 250px; width: 250px;"></div>
+        <button ng-click="testDownload()">Test Download Zip</button>
+        <br>
+        Downloading Progress... {{progress}}
+        <br>
+        <button ng-click="testSingleDownload()">Test Single Download</button>
     </div>
 </div>
