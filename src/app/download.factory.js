@@ -42,10 +42,12 @@
             return defer.promise;
         }
 
-        function downlaodAsZip(configs, callback, fileName) {
+        function downloadAsZip(configs, callback, fileName) {
             var deferredPromises = [];
             var files = [];        
+
             var progress = [];   
+
 
             angular.forEach(configs, function (value) {
                 var fileInProgress = {
@@ -56,8 +58,10 @@
                 progress.push(fileInProgress);
             })
 
+            var totalPerFile = 100/ configs.length;
+
             angular.forEach(configs, function(value) {
-                deferredPromises.push(downloadEachFile(value, callback, files, progress));
+                deferredPromises.push(downloadEachFile(value, callback, files, totalPerFile, progress));
             })
 
             $q.all(deferredPromises)
@@ -74,15 +78,18 @@
             return defer.promise;
         }
 
-        function downloadEachFile(config, callback, files, progress) {   
+        function downloadEachFile(config, callback, files, totalPerFile, progress) {   
+
                  
             return $http.get(config.sasUrl, {
                 cache: false,
                 responseType: "arraybuffer",
                 eventHandlers: {
                     progress: function (event) {
-                       var getProgress = progress.find(x => x.filename === config.filename);  
-                       getProgress.progress = (event.loaded / event.total) * 100; 
+                       var getProgress = progress.find(item => item.filename === config.filename);
+                       var currentProgress = angular.copy(getProgress.progress);
+                       getProgress.progress += ((event.loaded/event.total) * totalPerFile) - currentProgress;
+
                        callback(calculateAggregateProgress(progress));
                     }
                 },
@@ -115,12 +122,12 @@
                 total += value.progress;
             })
 
-            return total/progresses.length;
+            return total;
         }
 
         return {
             downloadAsFile: downloadAsFile,
-            downlaodAsZip: downlaodAsZip
+            downloadAsZip: downloadAsZip
             //downloadMutipleAsFiles: downloadMutipleAsFiles,
             //downloadMutipleAsZip: downloadMutipleAsZip,
             //downloadMutipleAsSingleZip: downloadMutipleAsSingleZip,

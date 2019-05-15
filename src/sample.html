@@ -18,19 +18,27 @@
                 var configs = [];
 
                 var sampleConfig = {
-                    "sasUrl": "https://devkoisstorage.blob.core.windows.net/kois/patient/305a13a8-fc61-4b54-ee71-08d671f627c5/3bb11eef-adae-4f2f-887f-84fdefc527fc?sv=2018-03-28&sr=b&sig=sexx0O82rVgjv1fMn8%2ByQCI2ioipmXYofubLXRgkZqk%3D&se=2019-05-14T03%3A39%3A35Z&sp=rwdl",
-                    "filename": "Kois Notes.txt"
+                    "sasUrl": "https://devkoisstorage.blob.core.windows.net/kois/patient/305a13a8-fc61-4b54-ee71-08d671f627c5/6a5871d0-5261-46d0-842b-0b53f779c180?sv=2018-03-28&sr=b&sig=fHK7GYxFSTTiyq4W5XHr%2FI7ZV7rIPir09GfJSyncizI%3D&se=2019-05-15T04%3A59%3A01Z&sp=rwdl",
+                    "filename": "Tooth Chart.png"
                 }
 
                 var sampleConfig2 = {
-                    "sasUrl": "https://devkoisstorage.blob.core.windows.net/kois/patient/305a13a8-fc61-4b54-ee71-08d671f627c5/3bb11eef-adae-4f2f-887f-84fdefc527fc?sv=2018-03-28&sr=b&sig=sexx0O82rVgjv1fMn8%2ByQCI2ioipmXYofubLXRgkZqk%3D&se=2019-05-14T03%3A39%3A35Z&sp=rwdl",
-                    "filename": "SampleJPGImage_15mbmb.jpg"
+                    "sasUrl": "https://devkoisstorage.blob.core.windows.net/kois/patient/305a13a8-fc61-4b54-ee71-08d671f627c5/6a5871d0-5261-46d0-842b-0b53f779c180?sv=2018-03-28&sr=b&sig=fHK7GYxFSTTiyq4W5XHr%2FI7ZV7rIPir09GfJSyncizI%3D&se=2019-05-15T04%3A59%3A01Z&sp=rwdl",
+                    "filename": "Tooth Chart(1).png"
+                }
+
+                var sampleConfig3 = {
+                    "sasUrl": "https://devkoisstorage.blob.core.windows.net/kois/patient/305a13a8-fc61-4b54-ee71-08d671f627c5/6a5871d0-5261-46d0-842b-0b53f779c180?sv=2018-03-28&sr=b&sig=fHK7GYxFSTTiyq4W5XHr%2FI7ZV7rIPir09GfJSyncizI%3D&se=2019-05-15T04%3A59%3A01Z&sp=rwdl",
+                    "filename": "Tooth Chart(2).png"
                 }
 
                 configs.push(sampleConfig);
-                configs.push(sampleConfig2);
+             //    configs.push(sampleConfig2);
+                 //configs.push(sampleConfig3);
 
-                downloadService.downlaodAsZip(configs, $scope.mainConfig, "Kois Notes");
+                downloadService.downloadAsZip(configs, $scope.mainConfig, "TestZip");
+               
+
             }
 
             $scope.testSingleDownload = function() {
