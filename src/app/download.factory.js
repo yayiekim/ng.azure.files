@@ -42,7 +42,7 @@
             return defer.promise;
         }
 
-        function downlaodAsZip(configs, callback, fileName) {
+        function downloadAsZip(configs, callback, fileName) {
             var deferredPromises = [];
             var files = [];        
 
@@ -127,7 +127,7 @@
 
         return {
             downloadAsFile: downloadAsFile,
-            downlaodAsZip: downlaodAsZip
+            downloadAsZip: downloadAsZip
             //downloadMutipleAsFiles: downloadMutipleAsFiles,
             //downloadMutipleAsZip: downloadMutipleAsZip,
             //downloadMutipleAsSingleZip: downloadMutipleAsSingleZip,
