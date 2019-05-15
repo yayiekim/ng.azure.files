@@ -45,7 +45,9 @@
         function downlaodAsZip(configs, callback, fileName) {
             var deferredPromises = [];
             var files = [];        
-             var progress = [];   
+
+            var progress = [];   
+
 
             angular.forEach(configs, function (value) {
                 var fileInProgress = {
@@ -77,6 +79,7 @@
         }
 
         function downloadEachFile(config, callback, files, totalPerFile, progress) {   
+
                  
             return $http.get(config.sasUrl, {
                 cache: false,
@@ -86,6 +89,7 @@
                        var getProgress = progress.find(item => item.filename === config.filename);
                        var currentProgress = angular.copy(getProgress.progress);
                        getProgress.progress += ((event.loaded/event.total) * totalPerFile) - currentProgress;
+
                        callback(calculateAggregateProgress(progress));
                     }
                 },
