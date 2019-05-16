@@ -52,7 +52,8 @@
             angular.forEach(configs, function (value) {
                 var fileInProgress = {
                     "progress": 0,
-                    "filename": value.filename
+                    "filename": value.filename,
+                    "id": value.id
                 };
 
                 progress.push(fileInProgress);
@@ -86,7 +87,7 @@
                 responseType: "arraybuffer",
                 eventHandlers: {
                     progress: function (event) {
-                       var getProgress = progress.find(item => item.filename === config.filename);
+                       var getProgress = progress.find(item => item.id === config.id);
                        var currentProgress = angular.copy(getProgress.progress);
                        getProgress.progress += ((event.loaded/event.total) * totalPerFile) - currentProgress;
 
