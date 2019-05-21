@@ -125,7 +125,7 @@
             var deffered = $q.defer();
             angular.forEach(blobs, function (value, key) {
 
-                zip.file(value.name, value);
+                zip.file(value.filename, value.blob);
 
             });
 
