@@ -42,6 +42,37 @@
             return defer.promise;
         }
 
+        function downloadAsFileStream(config) {
+
+            $http.get(config.sasUrl, {
+                cache: false,
+                responseType: "arraybuffer",
+                eventHandlers: {
+                    progress: function (event) {
+                        config.progress((event.loaded / event.total) * 100);
+                    }
+                },
+                headers: {
+                    "Content-Type": "application/octet-stream; charset=utf-8"
+                },
+                requestComingFromUploaderService: true
+            }).then(function (response) {
+                var octetStreamMime = "application/octet-stream";
+
+
+                var contentType = response.headers["content-type"] || octetStreamMime;
+
+                var file = new File([response.data], config.filename, { type: contentType });
+                defer.resolve(file);
+
+            }, function (response) {
+                defer.reject(response);
+
+            });
+
+            return defer.promise;
+        }
+
         function downloadAsZip(configs, callback, fileName) {
             var deferredPromises = [];
             var files = [];        
@@ -128,7 +159,8 @@
 
         return {
             downloadAsFile: downloadAsFile,
-            downloadAsZip: downloadAsZip
+            downloadAsZip: downloadAsZip,
+            downloadAsFileStream: downloadAsFileStream
             //downloadMutipleAsFiles: downloadMutipleAsFiles,
             //downloadMutipleAsZip: downloadMutipleAsZip,
             //downloadMutipleAsSingleZip: downloadMutipleAsSingleZip,
