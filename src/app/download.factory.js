@@ -5,11 +5,8 @@
 
     function Factory($q, $http, zipService) {
 
-        var defer = $q.defer();
-       
-        
-
         function downloadAsFile(config) {
+            var defer = $q.defer();
 
             $http.get(config.sasUrl, {
                 cache: false,
@@ -43,6 +40,7 @@
         }
 
         function downloadAsFileStream(config) {
+            var defer = $q.defer();
 
             $http.get(config.sasUrl, {
                 cache: false,
@@ -74,6 +72,8 @@
         }
 
         function downloadAsZip(configs, callback, fileName) {
+            var defer = $q.defer();
+
             var deferredPromises = [];
             var files = [];        
 
