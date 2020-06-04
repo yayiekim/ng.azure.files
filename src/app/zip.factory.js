@@ -6,7 +6,6 @@
     Factory.$inject = ['$q', '$http'];
 
     function Factory($q, $http) {
-        const invalidExtension = ["exe", "py", "sfx", "js", "jar", "html", "dll", "bat", "vbs", "vb", "tmp", "msi", "msp", "com", "gadget", "cmd", "vbe", "jse", "ps1", "ps1xml", "ps2", "ps2xml", "psc1", "psc2", "lnk", "inf", "scf"];
 
         function zipFolder(dataTransferItems) {
 
@@ -142,66 +141,6 @@
 
             return deffered.promise;
 
-
-            
-        }
-
-        function validateZipFile(arg) {
-            var invalidFileExt = invalidExtension;
-            var promises = [];
-            var result = true;
-
-
-            function traverse(internalArg) {
-                return JSZip.loadAsync(internalArg).then(function (zip) {
-
-                    angular.forEach(zip.files, function (value, key) {
-
-                        var deffered = $q.defer();
-
-                        var extName = value.name.substring(value.name.lastIndexOf(".") + 1);
-
-                        if (extName.toLowerCase() === 'zip') {
-
-                            zip.files[value.name].async('arrayBuffer').then(function (fileData) {
-
-                                promises.push(traverse(fileData));
-                                deffered.resolve();
-                            });
-
-                        } else {
-                            if (invalidFileExt.indexOf(extName.toLowerCase()) !== -1){
-                                result = false;
-
-                            }
-                        }
-
-                    });
-
-                });
-            }
-            promises.push(traverse(arg));
-
-
-            return $q.all(promises).then(function (res) {
-                return result;
-            });
-
-        }
-
-        function validateFiles(arg) {
-            var invalidFileExt = invalidExtension;
-
-            var result = true;
-
-            var extName = arg.name.substring(arg.name.lastIndexOf(".") + 1);
-
-            if (invalidFileExt.indexOf(extName.toLowerCase()) !== -1){
-                result = false;
-            }
-
-            return result;
-
         }
 
 
@@ -209,9 +148,7 @@
             unzip: _unzip,
             zipMultipleFiles: zipMultipleFiles,
             zipFolder: zipFolder,
-            zipMultipleBlobs: zipMultipleBlobs,
-            validateZipFile: validateZipFile,
-            validateFiles: validateFiles
+            zipMultipleBlobs: zipMultipleBlobs
         };
 
 
