@@ -67,7 +67,16 @@
                 link: function (scope, element, attributes) {
 
                     element.bind("dragover", function (e) {
-                        e.stopPropagation(); e.preventDefault(); e.dataTransfer.dropEffect = 'copy';
+ 
+                        e.stopPropagation(); 
+                        e.preventDefault(); 
+
+                        if(e.dataTransfer){
+                            e.dataTransfer.dropEffect = 'copy';
+                        }else{
+                            e.originalEvent.dataTransfer.dropEffect = 'copy';
+                        }
+                       
                     });
 
                     element.bind("drop", function (e) {
@@ -76,13 +85,46 @@
 
                         var fileList = [];
                         var zipPromises = [];
-                        var files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
+                        var files = [];
+
+                        if(e.dataTransfer){
+                             files = e.dataTransfer.files
+                        }else if(e.originalEvent.dataTransfer){
+                             files = e.originalEvent.dataTransfer
+                        }
+                        else{
+                             files = e.target.files;
+                        }
+
 
                         if (files.length > 0) {
 
                             for (var i = 0; i < files.length; i++) {
 
-                                if (typeof (e.dataTransfer.items) !== 'undefined') {
+                                if (typeof (e.originalEvent) !== 'undefined') {
+                                    var entry = e.originalEvent.dataTransfer.items[i].webkitGetAsEntry();
+                                    if (scope.imageOnly()) {
+                                        var extension = files[i].name.split(".").pop();
+
+                                        var isImage = false;
+                                        angular.forEach(supportedImageFormats, function (value, key) {
+                                            if (value.toUpperCase() === extension.toUpperCase()) {
+                                                isImage = true;
+                                            }
+                                        });
+
+                                        if (isImage) {
+                                            fileList.push(files[i]);
+                                        }
+                                    }
+                                    else {
+                                        if (entry.isFile) {
+                                            fileList.push(files[i]);
+                                        } else if (entry.isDirectory) {
+                                            zipPromises.push(zipService.zipFolder(entry));
+                                        }   
+                                    }                             
+                                }else if(typeof (e.dataTransfer) !== 'undefined'){
                                     var entry = e.dataTransfer.items[i].webkitGetAsEntry();
                                     if (scope.imageOnly()) {
                                         var extension = files[i].name.split(".").pop();
@@ -105,7 +147,30 @@
                                             zipPromises.push(zipService.zipFolder(entry));
                                         }   
                                     }                             
-                                }                 
+                                } else {
+                                    var entry = e.target.items[i].webkitGetAsEntry();
+                                    if (scope.imageOnly()) {
+                                        var extension = files[i].name.split(".").pop();
+
+                                        var isImage = false;
+                                        angular.forEach(supportedImageFormats, function (value, key) {
+                                            if (value.toUpperCase() === extension.toUpperCase()) {
+                                                isImage = true;
+                                            }
+                                        });
+
+                                        if (isImage) {
+                                            fileList.push(files[i]);
+                                        }
+                                    }
+                                    else {
+                                        if (entry.isFile) {
+                                            fileList.push(files[i]);
+                                        } else if (entry.isDirectory) {
+                                            zipPromises.push(zipService.zipFolder(entry));
+                                        }   
+                                    }                             
+                                }                    
                             }
                         }
 
