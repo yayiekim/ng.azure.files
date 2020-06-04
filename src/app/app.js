@@ -90,7 +90,7 @@
                         if(e.dataTransfer){
                              files = e.dataTransfer.files
                         }else if(e.originalEvent.dataTransfer){
-                             files = e.originalEvent.dataTransfer
+                             files = e.originalEvent.dataTransfer.files
                         }
                         else{
                              files = e.target.files;
