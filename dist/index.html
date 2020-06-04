@@ -1,0 +1,74 @@
+<script src="/ng.azure.files.bundle.js"></script>
+<script>
+    var app = angular.module('demo', ['ng.azure.files'])
+        .controller('cont', function ($scope, downloadService, $sce) {
+            $scope.greeting = 'Welcome!';
+            $scope.progress = 0;
+            $scope.innerLabel = $sce.trustAsHtml('<i class="fa fa-calendar">dsafasdfsda</i>');
+            $scope.mainConfig = function (event) {
+                $scope.progress = parseInt(event);
+            };
+
+            $scope.nInputFile = function () {
+
+                console.log("callback");
+            }
+
+            $scope.testDownload = function () {
+                var configs = [];
+
+               
+                var sampleConfig = {
+                    "sasUrl": "",
+                    "filename": "Tooth Chart.png",
+                    "id": "0"
+                }
+
+                var sampleConfig2 = {
+                    "sasUrl": "",
+                    "filename": "Tooth Chart(1).png",
+                    "id": "1"
+                }
+
+                var sampleConfig3 = {
+                    "sasUrl": "",
+                    "filename": "Tooth Chart(2).png"
+                }
+
+                configs.push(sampleConfig);
+                configs.push(sampleConfig2);
+                configs.push(sampleConfig3);
+
+                downloadService.downloadAsZip(configs, $scope.mainConfig, "TestZip");
+
+            }
+
+            $scope.testSingleDownload = function () {
+                var sampleConfig = {
+                    "sasUrl": "",
+                    "filename": "model.stl",
+                    progress: function (event) {}
+                };
+
+                downloadService.downloadAsFile(sampleConfig).then(function(response){
+                    console.log("Test Single Download Response: " + response);
+                });
+
+            }
+        });
+
+</script>
+<div ng-app="demo">
+    <div ng-controller="cont">
+        <input hidden="hidden" browse-file id="file-input" type="file" file-list-callback="nInputFile(files)" />
+        <label for="file-input">browse</label>
+        <div drop-file  file-list-callback="nInputFile(files)"
+            style="background-color: coral; height: 250px; width: 250px;"></div>
+        <button ng-click="testDownload()">Test Download Zip</button>
+        <br>
+        Downloading Progress... {{progress}}
+        <br>
+        <button ng-click="testSingleDownload()">Test Single Download</button>
+        <browse-file inner-label="innerLabel" id="file-input" type="file" file-list-callback="nInputFile(files)" ></browse-file>
+    </div>
+</div>
